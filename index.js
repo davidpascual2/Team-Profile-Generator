@@ -1,47 +1,41 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const employee = require('./lib/employee');
-const engineer = require('./lib/engineer');
-const intern = require('./lib/intern');
-const manager = require('./lib/manager');
 
+const employees = []
 
+//import classes
+const Employee = require('./lib/employee');
+const Engineer = require('./lib/engineer');
+const Intern = require('./lib/intern');
+const Manager = require('./lib/manager');
+
+const startHTML = require('./src/startHTML');
 
 const ManQuestions = [
 
     {
         type: 'input',
         message: "Enter team manager name",
-        name: "name"
+        name: "manName"
     },
     {
         type: 'input',
         message: "Enter team manager employee ID",
-        name: "ID"
+        name: "manId"
     },
     {
         type: 'input',
         message: "enter team manager Email",
-        name: "email"
+        name: "manEmail"
     },
     {
         type: 'input',
         message: "enter team manager office number",
-        name: "office"
+        name: "manOffice"
     },
-    {
-        type: "checkbox",
-        name: "addMember",
-        message: "Add team member?",
-        choices: [
-            'Engineer',
-            'Intern',
-            'finish Building Team'
-        ]
-    },
+    
 ]
-//add if stamtnet if user picks engineer or intern?
-// if(engineer === true) {
+
 const engQuestions = [
         {
             type: 'input',
@@ -51,7 +45,7 @@ const engQuestions = [
         {
             type: 'input',
             message: "Enter engineer employee ID",
-            name: "engID"
+            name: "engId"
         },
         {
             type: 'input',
@@ -60,19 +54,10 @@ const engQuestions = [
         },
         {
             type: 'input',
-            message: "enter engineer office number",
-            name: "engOffice"
+            message: "enter engineer github username",
+            name: "github"
         },
-        {
-            type: "checkbox",
-            name: "addMember",
-            message: "Add team member?",
-            choices: [
-                'Engineer',
-                'Intern',
-                'finish Building Team'
-            ]
-        },
+        
 ]
 
 const intQuestions = [
@@ -85,7 +70,7 @@ const intQuestions = [
         {
             type: 'input',
             message: "Enter intern employee ID",
-            name: "intID"
+            name: "intId"
         },
         {
             type: 'input',
@@ -97,41 +82,72 @@ const intQuestions = [
             message: "enter intern School",
             name: "intSchool"
         },
-        {
-            type: "checkbox",
-            name: "addMember",
-            message: "Add team member?",
-            choices: [
-                'Engineer',
-                'Intern',
-                'finish Building Team'
-            ]
-        },
+        
+]
+
+const questions = [
+    {
+        type: "list",
+        name: "addMember",
+        message: "Add team member?",
+        choices: [
+            'Engineer',
+            'Intern',
+            'Finish Building Team'
+        ]
+    },
+
 ]
 
 function intern() {
+    inquirer.prompt(intQuestions)
+    .then(response => {
+        let newIntern =  new Intern(response.intName, response.intId, response.intEmail, response.intSchool)
+        employees.push(newIntern)
+        menu();
 
+    })
 }
 
 function engineer() {
-
+    inquirer.prompt(engQuestions)
+        .then(response => {
+            let newEngineer =  new Engineer(response.engName, response.engId, response.engEmail, response.github)
+            employees.push(newEngineer)
+            menu();
+    })
 }
 
 function manager() {
-
+    inquirer.prompt(ManQuestions)
+        .then(response => {
+            //create manager
+            let newManager =  new Manager(response.manName, response.manId, response.manEmail, response.manOffice)
+            employees.push(newManager)
+            menu();
+        })
 }
+function menu() {
+    inquirer.prompt(questions).then(response => {
+        console.log('if statment')
+        if(response.addMember === 'Engineer') {
+            return engineer();
+        } if(response.addMember === 'Intern') {
+            return intern();
+        } if(response.addMember === 'finish Building Team') {
 
+            return writeToFile(employees);
+        }
+    }) .catch(err => {console.log(err)})
+}
 function writeToFile(data) {
-    fs.writeFile('./index.html', generate(data), (err) => {
-        err ? console.error(err) : console.log('File Updated')
+    fs.writeFileSync('./dist/index.html', startHTML(data), (err) => {
+        err ? console.error(err) : console.log('File Updated!')
     })
 };
 
 init = () => {
-    inquirer.prompt(questions)
-        .then(data => {
-            writeToFile(data)
-        });
+    manager()
 };
 
 //function to call to initialize app
