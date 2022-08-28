@@ -23,8 +23,6 @@ once you type in `node index.js` you will be prompted with a series of questions
 
 ![screenshot 1](./assets/Screen%20Shot%202022-08-28%20at%203.30.20%20PM.png)
 ![screenshot 2](./assets/Screen%20Shot%202022-08-28%20at%203.58.04%20PM.png)
-## Deployed Link
-
 
 ## Author
 - GitHub: davidpascual2
