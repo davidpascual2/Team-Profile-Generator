@@ -93,7 +93,7 @@ const questions = [
         choices: [
             'Engineer',
             'Intern',
-            'Finish Building Team'
+            'finish Building Team'
         ]
     },
 
