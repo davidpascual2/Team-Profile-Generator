@@ -32,14 +32,14 @@ const startHTML = (data) => {
     </head>
     <body>
         <header>
-    
+            <h1 class="text-center p-3 mb-2 bg-primary text-white">My Team</h1>
         </header>
         <main>
-        <div>
-            ${managerHTML}
-            ${engineerHTML || ""} 
-            ${internHTML || ""}
-        </div>
+            <div class="d-flex justify-content-evenly align-items-center">
+                ${managerHTML}
+                ${engineerHTML || ""} 
+                ${internHTML || ""}
+            </div>
         </main>
     </body>
     </html>`
